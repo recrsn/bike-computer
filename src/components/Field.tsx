@@ -2,8 +2,9 @@ type FieldProps = {
   title: string;
   unit?: string;
   value: string;
+  extra?: string;
   size?: "small" | "medium" | "large";
-}
+};
 
 function valueClassNameForSize(size?: string) {
   if (!size) return "text-2xl";
@@ -17,13 +18,15 @@ function valueClassNameForSize(size?: string) {
   }
 }
 
-export default function Field({ title, unit, value, size }: FieldProps) {
+export default function Field({ title, unit, value, size, extra }: FieldProps) {
   return (
     <div className="flex flex-col items-center py-3">
-      <span className="font-bold text-gray-600 uppercase" >{title}</span>
+      <span className="font-bold text-gray-600 uppercase">{title}</span>
       <div className="font-mono flex flex-row items-center">
         <span className={`${valueClassNameForSize(size)}`}>{value}</span>
         {unit && <span className="ml-1">{unit}</span>}
       </div>
-    </div>);
+      {extra && <span className="text-gray-600 text-sm">{extra}</span>}
+    </div>
+  );
 }
