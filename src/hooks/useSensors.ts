@@ -31,8 +31,8 @@ const useSensorStore = create<SensorsState>()((set) => ({
   setHeartRateMonitor: (device) => set(() => ({ heartRateMonitor: device })),
   addSpeedAndCadenceSensor: (device) =>
     set((state) => ({
-      speedAndCadenceSensor: [...state.speedAndCadenceSensor, device],
-    })),
+      speedAndCadenceSensor: [...state.speedAndCadenceSensor, device]
+    }))
 }));
 
 async function readDeviceInfo(btDevice: BluetoothDevice): Promise<DeviceInfo> {
@@ -47,14 +47,14 @@ async function readDeviceInfo(btDevice: BluetoothDevice): Promise<DeviceInfo> {
 
   const [manufacturer, model] = await Promise.all([
     deviceInfo.getCharacteristic("manufacturer_name_string"),
-    deviceInfo.getCharacteristic("model_number_string"),
+    deviceInfo.getCharacteristic("model_number_string")
   ]);
 
   return {
     manufacturer: manufacturer
       ? decoder.decode(await manufacturer.readValue())
       : undefined,
-    model: model ? decoder.decode(await model.readValue()) : undefined,
+    model: model ? decoder.decode(await model.readValue()) : undefined
   };
 }
 
@@ -63,7 +63,7 @@ const SPEED_AND_CADENCE_SERVICE_UUID = "00001816-0000-1000-8000-00805f9b34fb";
 export default function useSensors() {
   const [heartRateMonitor, setHeartRateMonitor] = useSensorStore((state) => [
     state.heartRateMonitor,
-    state.setHeartRateMonitor,
+    state.setHeartRateMonitor
   ]);
   const [speedAndCadenceSensors, addSpeedAndCadenceSensor] = useSensorStore(
     (state) => [state.speedAndCadenceSensor, state.addSpeedAndCadenceSensor]
@@ -73,16 +73,16 @@ export default function useSensors() {
     const btDevice = await navigator.bluetooth.requestDevice({
       filters: [
         { services: ["heart_rate"] },
-        { services: ["cycling_speed_and_cadence"] },
+        { services: ["cycling_speed_and_cadence"] }
       ],
-      optionalServices: ["device_information"],
+      optionalServices: ["device_information"]
     });
 
     const server = await btDevice.gatt!.connect();
 
     const [services, deviceInfo] = await Promise.all([
       server.getPrimaryServices(),
-      readDeviceInfo(btDevice),
+      readDeviceInfo(btDevice)
     ]);
 
     for (const service of services) {
@@ -90,7 +90,7 @@ export default function useSensors() {
         setHeartRateMonitor({
           device: btDevice,
           deviceInfo,
-          features: [Feature.HeartRate],
+          features: [Feature.HeartRate]
         });
       }
 
@@ -120,5 +120,6 @@ export default function useSensors() {
     heartRateMonitor,
     speedAndCadenceSensors,
     search,
+    available: "bluetooth" in navigator
   };
 }

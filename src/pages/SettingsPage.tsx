@@ -2,6 +2,8 @@ import { List, ListItem, ListItemText } from "../components/List";
 import useSensors, { Feature, Sensor } from "../hooks/useSensors";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftIcon, PlusIcon } from "@radix-ui/react-icons";
+import { Banner, BannerTitle } from "../components/Banner";
+import IconButton from "../components/IconButton";
 
 function SensorInfo({ sensor }: { sensor: Sensor }) {
   return (
@@ -16,7 +18,7 @@ function SensorInfo({ sensor }: { sensor: Sensor }) {
 
 export default function SettingsPage() {
   const navigate = useNavigate();
-  const { heartRateMonitor, speedAndCadenceSensors, search } = useSensors();
+  const { available, heartRateMonitor, speedAndCadenceSensors, search } = useSensors();
 
   const speedSensor = speedAndCadenceSensors
     .filter((s) => s.features.includes(Feature.WheelRevolution))
@@ -36,11 +38,20 @@ export default function SettingsPage() {
         <h1 className="text-4xl">Settings</h1>
         <div className="grow" />
         <div className="flex flex-row p-2 items-center justify-center">
-          <button className="text-green-500" onClick={search}>
+          <IconButton disabled={!available} theme="success" onClick={search}>
             <PlusIcon width={24} height={24} />
-          </button>
+          </IconButton>
         </div>
       </div>
+      {!available && (
+        <Banner theme={"error"}>
+          <BannerTitle>Bluetooth is not available</BannerTitle>
+          <p>
+            Connecting to BLE sensors require Bluetooth support and currently only works on
+            Google Chrome on Desktop and Android.
+          </p>
+        </Banner>
+      )}
       <List>
         <ListItem title="Heart rate monitor">
           <ListItemText>
