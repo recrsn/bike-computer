@@ -16,6 +16,9 @@ function diff(last: number, current: number, overflow: number) {
 export function useSpeedAndCadenceSensor() {
   const [speed, setSpeed] = useState<number>();
   const [crankCadence, setCrankCadence] = useState<number>();
+  const [recording, setRecording] = useState(false);
+  const initialWheelRevolutions = useRef(0);
+  const [distance, setDistance] = useState<number | undefined>();
 
   const { speedAndCadenceSensors } = useSensors();
 
@@ -48,7 +51,7 @@ export function useSpeedAndCadenceSensor() {
 
         const speed =
           (((lastWheelRevolutionsRef.current - cumulativeWheelRevolutions) *
-            TYRE_CIRCUMFERENCE_METRES) /
+              TYRE_CIRCUMFERENCE_METRES) /
             diff(
               lastWheelEventTimeRef.current,
               lastWheelEventTime,
@@ -56,7 +59,12 @@ export function useSpeedAndCadenceSensor() {
             )) *
           CSC_TIME_FACTOR;
         setSpeed(speed);
+
+        if (recording) {
+          setDistance((cumulativeWheelRevolutions - initialWheelRevolutions.current) * TYRE_CIRCUMFERENCE_METRES);
+        }
       }
+
 
       const crankRevolutionDataPresent = flags & 0x2;
       if (crankRevolutionDataPresent) {
@@ -67,10 +75,10 @@ export function useSpeedAndCadenceSensor() {
 
         const crankCadence =
           (diff(
-            lastCrackRevolutionsRef.current,
-            cumulativeCrankRevolutions,
-            MAX_UINT16
-          ) /
+              lastCrackRevolutionsRef.current,
+              cumulativeCrankRevolutions,
+              MAX_UINT16
+            ) /
             diff(
               lastCrankEventTimeRef.current,
               lastCrankEventTime,
@@ -87,6 +95,16 @@ export function useSpeedAndCadenceSensor() {
     },
     [setSpeed, setCrankCadence]
   );
+
+  const startRecording = useCallback(() => {
+    setRecording(true);
+    setDistance(0);
+    initialWheelRevolutions.current = lastWheelRevolutionsRef.current;
+  }, [setRecording, setDistance]);
+
+  const stopRecording = useCallback(() => {
+    setRecording(false);
+  }, [setRecording]);
 
   useEffect(() => {
     if (!speedAndCadenceSensors) {
@@ -127,6 +145,9 @@ export function useSpeedAndCadenceSensor() {
 
   return {
     speed,
+    distance,
     crankCadence,
+    startRecording,
+    stopRecording
   };
 }
