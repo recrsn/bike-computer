@@ -29,7 +29,7 @@ export function useBikeComputer() {
     setSegments([{ start: new Date() }]);
     startRecording();
     gps.start();
-  }, [gps]);
+  }, [gps, startRecording]);
 
   const stop = useCallback(() => {
     setRunning(false);
@@ -39,7 +39,7 @@ export function useBikeComputer() {
     ]);
     gps.stop();
     stopRecording();
-  }, [gps, segments]);
+  }, [gps, segments, stopRecording]);
 
   const pause = useCallback(() => {
     setRunning(false);
