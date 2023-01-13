@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { CaretRightIcon } from "@radix-ui/react-icons";
 
 type ListItemProps = {
   title?: string;
@@ -22,7 +21,7 @@ export function ListItem({ title, children, onClick }: ListItemProps) {
         {title && <span className="font-bold">{title}</span>}
         <span>{children}</span>
       </div>
-      <FontAwesomeIcon icon={faChevronRight} />
+      <CaretRightIcon width={24} height={24} />
     </div>
   );
 }

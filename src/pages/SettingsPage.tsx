@@ -1,8 +1,7 @@
 import { List, ListItem, ListItemText } from "../components/List";
 import useSensors, { Feature, Sensor } from "../hooks/useSensors";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAdd, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeftIcon, PlusIcon } from "@radix-ui/react-icons";
 
 function SensorInfo({ sensor }: { sensor: Sensor }) {
   return (
@@ -31,14 +30,14 @@ export default function SettingsPage() {
       <div className="p-2 flex flex-row">
         <div className="flex flex-row p-2 items-center justify-center">
           <button onClick={() => navigate(-1)}>
-            <FontAwesomeIcon icon={faChevronLeft} />
+            <ArrowLeftIcon width={24} height={24} />
           </button>
         </div>
         <h1 className="text-4xl">Settings</h1>
         <div className="grow" />
         <div className="flex flex-row p-2 items-center justify-center">
           <button className="text-green-500" onClick={search}>
-            <FontAwesomeIcon icon={faAdd} />
+            <PlusIcon width={24} height={24} />
           </button>
         </div>
       </div>

@@ -15,7 +15,6 @@ export function useBikeComputer() {
   const [startTime, setStartTime] = useState<Date>();
   const [running, setRunning] = useState(false);
 
-  const [power, setPower] = useState(0);
   const [segments, setSegments] = useState([] as Segment[]);
 
   const start = () => {
@@ -29,7 +28,7 @@ export function useBikeComputer() {
     setRunning(false);
     setSegments([
       ...segments,
-      { start: segments[segments.length - 1].start, end: new Date() },
+      { start: segments[segments.length - 1].start, end: new Date() }
     ]);
     gps.stop();
   };
@@ -38,7 +37,7 @@ export function useBikeComputer() {
     setRunning(false);
     setSegments([
       ...segments,
-      { start: segments[segments.length - 1].start, end: new Date() },
+      { start: segments[segments.length - 1].start, end: new Date() }
     ]);
     gps.stop();
   };
@@ -52,7 +51,6 @@ export function useBikeComputer() {
     running,
     crankCadence,
     hrm,
-    power,
     segments,
     startTime,
 
@@ -64,6 +62,6 @@ export function useBikeComputer() {
     start,
     stop,
     pause,
-    resume,
+    resume
   };
 }

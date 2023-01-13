@@ -2,8 +2,7 @@ import Field from "../components/Field";
 import { useBikeComputer } from "../hooks/useBikeComputer";
 import ElapsedTimeField from "../components/ElapsedTimeField";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { GearIcon } from "@radix-ui/react-icons";
 
 function formatValue(value: number | undefined, precision: number = 2) {
   if (value === null || value === undefined || Number.isNaN(value)) {
@@ -22,7 +21,7 @@ export default function BikeComputerPage() {
     <div className="flex flex-col">
       <div className="flex flex-row justify-end px-2 py-1">
         <Link to="/settings">
-          <FontAwesomeIcon size="2xl" icon={faCog} />
+          <GearIcon width={24} height={24} />
         </Link>
       </div>
       <ElapsedTimeField segments={bikeComputer.segments} />
